@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.eduservice.mapper.EduCourseMapper">
+    <!-- 根据课程id 查询课程确认信息 -->
+    <select id="getCoursePublishVo" resultType="com.atguigu.eduservice.entity.vo.CoursePublishVo">
+        SELECT
+            ec.id,ec.title,ec.price,ec.lesson_num,ec.cover,
+            ecd.description,
+            et.name AS teacherName,
+            es1.title AS OneSubject,
+            es2.title AS TwoSubject
+        FROM edu_course ec
+            LEFT JOIN edu_course_description ecd ON ec.id = ecd.id
+            LEFT JOIN edu_teacher et ON ec.teacher_id = et.id
+            LEFT JOIN edu_subject es1 ON ec.subject_parent_id = es1.id
+            LEFT JOIN edu_subject es2 ON ec.subject_id = es2.id
+        WHERE ec.id = #{courseId}
+    </select>
+    <select id="getFrontCourseById" resultType="com.atguigu.eduservice.entity.vo.frontCourseVo">
+        SELECT 	ec.`title`,ec.`price`,ec.`lesson_num`,ec.`cover`,ec.`buy_count`,ec.`view_count`,
+            et.`id` AS teacherId,et.`name` AS teacherName,et.`career` as teacherCareer,et.`avatar` as teacherAvatar,
+            ecd.`description` FROM edu_course ec
+            LEFT JOIN edu_teacher et ON ec.`teacher_id` = et.`id`
+            LEFT JOIN edu_course_description ecd ON ec.`id` = ecd.`id`
+            WHERE ec.id = #{courseId}
+    </select>
+</mapper>
