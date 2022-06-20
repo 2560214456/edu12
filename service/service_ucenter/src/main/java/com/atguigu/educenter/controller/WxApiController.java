@@ -115,7 +115,7 @@ public class WxApiController {
             //使用Jwt根据ucenterMember对象生成token字符串，
             //最后：返回首页，通过路径传递token字符串
             String Token1 = JwtUtils.getJwtToken(ucenterMember.getId(), ucenterMember.getNickname());
-            return "redirect:http://localhost:3000?token="+Token1;
+            return "redirect:http://localhost:8222?token="+Token1;
         } catch (Exception e) {
             throw  new GuliException(20001,"登录失败");
         }

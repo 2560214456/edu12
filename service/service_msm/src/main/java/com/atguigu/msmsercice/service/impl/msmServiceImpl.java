@@ -19,7 +19,7 @@ public class msmServiceImpl implements MsmService {
     public boolean send(Map<String, Object> param, String phone) {
         if (StringUtils.isEmpty(phone)) return false;
         try {
-            Client client = this.createClient("LTAI5tKgHQ7fcWaNsKGRffYw", "vVWWq3S9f34JCba4w5FAPFLPohflnS");
+            Client client = this.createClient("阿里云id", "阿里云秘钥");
             SendSmsRequest sendSmsRequest = new SendSmsRequest()
                     .setSignName("阿里云短信测试")
                     .setTemplateCode("SMS_154950909")
