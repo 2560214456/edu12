@@ -29,6 +29,7 @@ public class MsmController {
     public Result sendMsm(@PathVariable String phone){
         //从redis中获取验证码
         String redisCode = redisTemplate.opsForValue().get(phone);
+        // 查看redis是否有验证码
         if (!StringUtils.isEmpty(redisCode)){
             return Result.success().data("message","请稍后再试");
         }
