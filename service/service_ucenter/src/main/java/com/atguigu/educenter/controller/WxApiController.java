@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,11 +37,11 @@ public class WxApiController {
                 +"&response_type=code"; // 固定地址，在文档中有*/
         // 微信开放平台授权baseUrl / %s 占位符
         String baseUrl = "https://open.weixin.qq.com/connect/qrconnect" +
-                "?appid=%s" +
-                "&redirect_uri=%s" +
-                "&response_type=code" +
-                "&scope=snsapi_login" +
-                "&state=%s" +
+                "?appid=%s" + // 应用的唯一标识符
+                "&redirect_uri=%s" + // 用户扫描后，同意登录，微信回调的接口（需要用URLEncoder 进行编码）
+                "&response_type=code" + //固定值 code
+                "&scope=snsapi_login" + // 应用授权作用域
+                "&state=%s" + // 用于保持请求和回调的状态，授权请求后原样带回给第三方
                 "#wechat_redirect";
         //对redirect_url 进行URLEnacoder编码
         String redirect_url = ConstanWxUtils.WX_OPEN_REDIRECT_URL;
@@ -67,7 +69,7 @@ public class WxApiController {
             //拿着code请求 微信固定地址，得到两个值，access_token  和 openid
             String baseAccessTokenUrl =
                     "https://api.weixin.qq.com/sns/oauth2/access_token" +
-                    "?appid=%s" +
+                    "?appid=%s" + //
                     "&secret=%s" +
                     "&code=%s" +
                     "&grant_type=authorization_code";
@@ -79,6 +81,7 @@ public class WxApiController {
                     code);
             //请求这个拼接好的地址，得到返回的两个值，access_token 和 openid
             String accessToken =  HttpClientUtils.get(WxUrl);
+
             //从accessToken 获取access_token 和 openId
             //先把accessToken 转化为 map
             Gson gson = new Gson();
@@ -115,7 +118,7 @@ public class WxApiController {
             //使用Jwt根据ucenterMember对象生成token字符串，
             //最后：返回首页，通过路径传递token字符串
             String Token1 = JwtUtils.getJwtToken(ucenterMember.getId(), ucenterMember.getNickname());
-            return "redirect:http://localhost:8222?token="+Token1;
+            return "redirect:http://localhost:8222?token="+Token1; // 返回首页，携带token字符串
         } catch (Exception e) {
             throw  new GuliException(20001,"登录失败");
         }

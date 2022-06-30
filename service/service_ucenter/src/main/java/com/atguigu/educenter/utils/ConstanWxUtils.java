@@ -12,6 +12,7 @@ public class ConstanWxUtils implements InitializingBean {
     private String appSecret;
     @Value("${wx_open_redirect_url}")
     private String redirectUrl;
+
     public static String WX_OPEN_APP_ID;
     public static String WX_OPEN_APP_SECRET;
     public static String WX_OPEN_REDIRECT_URL;

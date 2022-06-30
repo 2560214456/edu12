@@ -56,7 +56,7 @@ public class PayLogServiceImpl extends ServiceImpl<PayLogMapper, PayLog> impleme
             //发送请求，请求https://api.mch.weixin.qq.com/pay/orderquery（固定地址）
             HttpClient httpClient =
                     new HttpClient("https://api.mch.weixin.qq.com/pay/unifiedorder");
-            //设置xml格式的参数
+            //设置xml格式的参数 T6m9iK73b0kn9g5v426MKfHQH7X8rKwb 这个是微信开放平台商户key
             httpClient.setXmlParam(WXPayUtil
                     .generateSignedXml(m,"T6m9iK73b0kn9g5v426MKfHQH7X8rKwb"));
             httpClient.setHttps(true); // 支持https 访问
@@ -72,8 +72,8 @@ public class PayLogServiceImpl extends ServiceImpl<PayLogMapper, PayLog> impleme
             map.put("out_trade_no",orderNo);// 订单id
             map.put("course_id",order.getCourseId()); //课程id
             map.put("total_fee",order.getTotalFee()); //课程价格
-            map.put("result_code",resultMap.get("result_code"));//二维码操作状态码
-            map.put("code_url",resultMap.get("code_url")); // 二维码地址
+            map.put("result_code",resultMap.get("result_code"));//二维码操作状态码（不是支付是否成功状态码）
+            map.put("code_url",resultMap.get("code_url")); // 二维码地址（URL地址）
             return map;
         }catch (Exception e){
             throw new GuliException(20001,"生成二维码失败");

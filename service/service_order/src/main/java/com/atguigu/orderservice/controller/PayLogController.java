@@ -64,6 +64,7 @@ public class PayLogController {
                 .eq(Order::getCourseId, courseId)
                 .eq(Order::getMemberId, memberId)
                 .eq(Order::getStatus, 1));
+
         return count>0;
     }
 }
